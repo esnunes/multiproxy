@@ -1,0 +1,9 @@
+{
+  "admin": "/_multiproxy",
+  "cookie": "multiproxy",
+  "upstreams": [
+    { "key": "branch-a", "addr": "http://localhost:8001" },
+    { "key": "branch-b", "addr": "http://localhost:8002" }
+  ],
+  "broadcast": ["/webhooks/"]
+}
