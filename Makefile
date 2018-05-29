@@ -17,3 +17,7 @@ cov: test
 .PHONY: dep # Force download of all Go dependencies
 dep:
 	@dep ensure -v
+
+.PHONY: docker # Build docker image
+docker:
+	@docker build -t esnunes/multiproxy .
