@@ -2,4 +2,3 @@
 .gitignore
 examples/
 Dockerfile
-bin/
