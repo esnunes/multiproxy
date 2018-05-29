@@ -8,10 +8,10 @@ ADD . /go/src/github.com/esnunes/multiproxy
 
 RUN cd /go/src/github.com/esnunes/multiproxy/ && \
     dep ensure -v && \
-    go build -o multiproxy cmd/multiproxy/main.go
+    go install ./...
 
 # final stage
 FROM alpine
 WORKDIR /app
-COPY --from=build-env /go/src/github.com/esnunes/multiproxy/multiproxy /app/
+COPY --from=build-env /go/bin/multiproxy /app/
 ENTRYPOINT ./multiproxy
