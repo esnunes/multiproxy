@@ -15,3 +15,4 @@ FROM alpine
 WORKDIR /app
 COPY --from=build-env /go/bin/multiproxy /app/
 ENTRYPOINT ./multiproxy
+CMD ["./config.json"]
