@@ -14,5 +14,5 @@ RUN cd /go/src/github.com/esnunes/multiproxy/ && \
 FROM alpine
 WORKDIR /app
 COPY --from=build-env /go/bin/multiproxy /app/
-ENTRYPOINT ./multiproxy
+ENTRYPOINT ["./multiproxy"]
 CMD ["./config.json"]
