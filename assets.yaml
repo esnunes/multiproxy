@@ -1,0 +1,7 @@
+pkg: static
+dest: "./pkg/static"
+output: "static.go"
+custom:
+  - files:
+    - "./assets"
+    base: './assets'

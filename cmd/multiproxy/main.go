@@ -9,22 +9,18 @@ import (
 	"os"
 	"strings"
 
+	"github.com/esnunes/multiproxy"
+	"github.com/esnunes/multiproxy/pkg/admin"
 	"github.com/esnunes/multiproxy/pkg/broadcast"
 	"github.com/esnunes/multiproxy/pkg/unicast"
 )
 
-// Upstream ...
-type Upstream struct {
-	Key  string `json:"key"`
-	Addr string `json:"addr"`
-}
-
 // Config ...
 type Config struct {
-	Admin     string     `json:"admin"`
-	Cookie    string     `json:"cookie"`
-	Upstreams []Upstream `json:"upstreams"`
-	Broadcast []string   `json:"broadcast"`
+	Admin     string                `json:"admin"`
+	Cookie    string                `json:"cookie"`
+	Upstreams []multiproxy.Upstream `json:"upstreams"`
+	Broadcast []string              `json:"broadcast"`
 }
 
 func (c Config) String() string {
@@ -66,7 +62,7 @@ func LoadConfigFromFile(p string) (*Config, error) {
 		c.Cookie = "multiproxy"
 	}
 	if c.Upstreams == nil {
-		c.Upstreams = []Upstream{}
+		c.Upstreams = []multiproxy.Upstream{}
 	}
 	if c.Broadcast == nil {
 		c.Broadcast = []string{}
@@ -76,7 +72,7 @@ func LoadConfigFromFile(p string) (*Config, error) {
 }
 
 // ParseUpstreams ...
-func ParseUpstreams(us []Upstream) ([]*url.URL, map[string]*url.URL, error) {
+func ParseUpstreams(us []multiproxy.Upstream) ([]*url.URL, map[string]*url.URL, error) {
 	addrs := make([]*url.URL, len(us))
 	rules := map[string]*url.URL{}
 
@@ -114,8 +110,11 @@ func main() {
 	mux := http.NewServeMux()
 
 	// admin
-	mux.HandleFunc(c.Admin, func(w http.ResponseWriter, r *http.Request) {
-	})
+	mux.Handle(c.Admin, admin.NewHandler(admin.Options{
+		Cookie:    c.Cookie,
+		Upstreams: c.Upstreams,
+		Broadcast: c.Broadcast,
+	}))
 
 	// broadcast
 	bh := &broadcast.Handler{

@@ -4,6 +4,7 @@ help:
 
 .PHONY: run # Run the application
 run:
+	@fileb0x assets.yaml
 	@go run cmd/multiproxy/main.go examples/config.json
 
 .PHONY: test # Run all tests including code coverage
@@ -17,6 +18,7 @@ cov: test
 .PHONY: dep # Force download of all Go dependencies
 dep:
 	@dep ensure -v
+	@go get -u -v github.com/UnnoTed/fileb0x
 
 .PHONY: docker # Build docker image
 docker:
