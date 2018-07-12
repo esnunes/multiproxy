@@ -12,6 +12,8 @@ import (
 	"github.com/esnunes/multiproxy"
 	"github.com/esnunes/multiproxy/pkg/admin"
 	"github.com/esnunes/multiproxy/pkg/broadcast"
+	"github.com/esnunes/multiproxy/pkg/cors"
+	"github.com/esnunes/multiproxy/pkg/envs"
 	"github.com/esnunes/multiproxy/pkg/unicast"
 )
 
@@ -56,7 +58,7 @@ func LoadConfigFromFile(p string) (*Config, error) {
 
 	// set default values
 	if c.Admin == "" {
-		c.Admin = "/_multiproxy"
+		c.Admin = "/_admin"
 	}
 	if c.Cookie == "" {
 		c.Cookie = "multiproxy"
@@ -69,6 +71,29 @@ func LoadConfigFromFile(p string) (*Config, error) {
 	}
 
 	return &c, nil
+}
+
+// PatternFromAddr returns a ServeMux compatible pattern based on the given URL.
+func PatternFromAddr(a string) string {
+	u, _ := url.Parse(a)
+
+	p := u.Path
+	if !strings.HasSuffix(p, "/") {
+		p = p + "/"
+	}
+
+	return u.Hostname() + p
+}
+
+// OriginFromAddr returns a Origin Header compatible value based on the given URL.
+func OriginFromAddr(a string) string {
+	u, _ := url.Parse(a)
+
+	if u.Scheme == "" || u.Host == "" {
+		return ""
+	}
+
+	return u.Scheme + "://" + u.Host
 }
 
 // ParseUpstreams ...
@@ -110,7 +135,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	// admin
-	mux.Handle(c.Admin, admin.NewHandler(admin.Options{
+	mux.Handle(PatternFromAddr(c.Admin), admin.NewHandler(admin.Options{
 		Cookie:    c.Cookie,
 		Upstreams: c.Upstreams,
 		Broadcast: c.Broadcast,
@@ -124,11 +149,17 @@ func main() {
 		mux.Handle(endp, bh)
 	}
 
+	ch := cors.Cors{Origin: OriginFromAddr(c.Admin)}
+
+	eh := &envs.Handler{Cookie: c.Cookie}
+	mux.HandleFunc("/_multiproxy", ch.Handler(eh))
+
 	// unicast
 	mux.Handle("/", &unicast.Handler{
-		Cookie: c.Cookie,
-		Rules:  rules,
+		Selector: eh,
+		Rules:    rules,
 	})
 
+	log.Print("Listening at: 0.0.0.0:8080")
 	http.ListenAndServe(":8080", mux)
 }

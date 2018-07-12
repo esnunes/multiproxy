@@ -1,5 +1,5 @@
 {
-  "admin": "/_multiproxy",
+  "admin": "http://admin.localhost:8080/",
   "cookie": "multiproxy",
   "upstreams": [
     { "key": "branch-a", "addr": "http://localhost:8001" },
