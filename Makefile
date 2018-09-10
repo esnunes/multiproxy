@@ -23,3 +23,8 @@ dep:
 .PHONY: docker # Build docker image
 docker:
 	@docker build -t esnunes/multiproxy .
+
+.PHONY: web-build
+web-build:
+	@cd web; yarn install; yarn build; cd -
+
