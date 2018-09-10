@@ -18,13 +18,20 @@
 
 ```json
 {
-  "admin": "/_multiproxy",
+  "admin": "http://admin.localhost:8080/",
   "cookie": "multiproxy",
-  "upstreams": [
-    { "key": "branch-a", "addr": "http://localhost:8001" },
-    { "key": "branch-b", "addr": "http://localhost:8002" }
-  ],
-  "broadcast": ["/webhooks"]
+  "apps": [
+    {
+      "id": 1,
+      "name": "My app 1",
+      "description": "This is my fancy app 1",
+      "addr": "http://app1.localhost:8080",
+      "broadcast": ["webhooks/"],
+      "envs": [
+        { "name": "Environment 1", "key": "env1", "upstream": "http://localhost:8001" }
+      ]
+    }
+  ]
 }
 ```
 
