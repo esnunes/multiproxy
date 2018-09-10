@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Eduardo Nunes <esnunes@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel --global app src/index.html",
+    "build": "parcel build --global app src/index.html"
+  },
+  "dependencies": {
+    "@shopify/polaris": "2.2.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-saga": "^0.16.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "parcel-bundler": "1.9.2",
+    "prettier": "1.13.5"
+  }
+}
