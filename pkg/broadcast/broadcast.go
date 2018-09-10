@@ -53,6 +53,7 @@ func (h *Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 				log.Printf("Failed to execute request to %v: %v", u, err)
 				return
 			}
+			defer resp.Body.Close()
 
 			if resp.StatusCode < 200 || resp.StatusCode >= 400 {
 				log.Printf("Unexpected status code: %v", resp.StatusCode)
