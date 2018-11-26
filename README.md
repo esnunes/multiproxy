@@ -125,6 +125,10 @@ Example (available also in [examples/config.json](https://github.com/esnunes/mul
 
 > The example above uses Javascript syntax just because it allows comments, however, the config file must be in JSON format.
 
+## Authentication
+
+Multiproxy does not provide any kind of authentication. There are projects like [Bit.ly OAuth2 Proxy](https://github.com/bitly/oauth2_proxy) that provide an easy to use/setup authentication layer.
+
 ## Roadmap
 
 - [ ] Convert to Go 11 modules;
